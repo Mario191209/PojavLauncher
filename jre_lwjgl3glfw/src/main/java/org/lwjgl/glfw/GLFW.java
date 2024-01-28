@@ -1071,11 +1071,7 @@ public class GLFW
     }
 
     public static void glfwSetWindowIcon(@NativeType("GLFWwindow *") long window, @Nullable @NativeType("GLFWimage const *") GLFWImage.Buffer images) {}
-
-    public static void {
-        if (!mGLFWIsInputReady) {
-            mGLFWIsInputReady = true;
-            CallbackBridge.nativeSetInputReady(true);
+	
         }
         callV(Functions.SetupEvents);
         for (Long ptr : mGLFWWindowMap.keySet()) callJV(ptr, Functions.PumpEvents);
