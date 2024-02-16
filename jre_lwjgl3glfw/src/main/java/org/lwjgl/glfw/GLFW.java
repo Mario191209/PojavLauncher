@@ -1073,16 +1073,10 @@ public class GLFW
     public static void glfwSetWindowIcon(@NativeType("GLFWwindow *") long window, @Nullable @NativeType("GLFWimage const *") GLFWImage.Buffer images) {}
 
     public static void glfwPollEvents() {
-        long __functionAddress = Functions.PollEvents;
-        invokeV(__functionAddress);
-    }
-	 
-	    public static void glfwWaitEvents() {
-        long __functionAddress = Functions.WaitEvents;
-        invokeV(__functionAddress);
-	    }
-        
-    }
+        if (!mGLFWIsInputReady) {
+            mGLFWIsInputReady = true;
+            CallbackBridge.nativeSetInputReady(true);
+        }
         callV(Functions.SetupEvents);
         for (Long ptr : mGLFWWindowMap.keySet()) callJV(ptr, Functions.PumpEvents);
         callV(Functions.RewindEvents);
@@ -1094,10 +1088,12 @@ public class GLFW
             glfwSetWindowSize(window, mGLFWWindowWidth, mGLFWWindowHeight);
         }catch (Exception e) {
             e.printStackTrace();
-	}
+        }
+    }
 
-    
-	    public static void glfwWaitEventsTimeout(double timeout) {
+    public static void glfwWaitEvents() {}
+
+    public static void glfwWaitEventsTimeout(double timeout) {
         // Boardwalk: this isn't how you do a frame limiter, but oh well
         // System.out.println("Frame limiter");
     /*
